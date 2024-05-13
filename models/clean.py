@@ -157,6 +157,9 @@ def get_data():
     # Dropping 'goal' and 'like' column
     df = df.drop('goal', axis=1)
     df = df.drop('like', axis=1)
+    df = df.drop('shar', axis=1)
+    df = df.drop('prob', axis=1)
+
 
     # Categorizing career
     df["career"] = df["career"].apply(categorize_career)
@@ -169,8 +172,8 @@ def get_data():
     df["sinc"] = df["sinc"].fillna(df["sinc"].median())
     df["fun"] = df["fun"].fillna(df["fun"].median())
     df["amb"] = df["amb"].fillna(df["amb"].median())
-    df["shar"] = df["shar"].fillna(df["shar"].median())
-    df["prob"] = df["prob"].fillna(df["prob"].median())
+    # df["shar"] = df["shar"].fillna(df["shar"].median())
+    # df["prob"] = df["prob"].fillna(df["prob"].median())
     df["met"] = df["met"].fillna(df["met"].median())
 
     # Normalizing the data
