@@ -44,8 +44,10 @@ finance = ['Economist', 'research/financial industry', 'Financial Services', 'Ba
            'Trader', 'Wall Street Economist', 'Venture Capital/Consulting/Government', 'Investment banking',
            'International Development banker', 'Corporate Finance, Asset Management/ Hedge Funds',
            'Real Estate Consulting', 'investment management', 'Finance Related',
-           'Financial Mathematics-Investment Bank or Hedge Fund-Derivatives Quant Analyst', 'Work in an investment bank',
-           'Money Management', 'Public Finance', 'private equity', 'Health care finance', 'Fixed Income Sales & Trading',
+           'Financial Mathematics-Investment Bank or Hedge Fund-Derivatives Quant Analyst',
+           'Work in an investment bank',
+           'Money Management', 'Public Finance', 'private equity', 'Health care finance',
+           'Fixed Income Sales & Trading',
            'Finance/Economics'  'Trade Specialist', 'finance or engineering', 'Investment Banker',
            'Private Equity - Leveraged Buy-Outs', 'To go into Finance']
 
@@ -152,14 +154,13 @@ research = ['Operations Research', 'Biostatistics', 'Economic research', 'Resear
 def get_data():
     # Reading the data
     missing_values = ("n/a", "na", "--", '-')
-    df = pd.read_csv("data.csv", na_values=missing_values)
+    df = pd.read_csv("../data.csv", na_values=missing_values)
 
     # Dropping 'goal' and 'like' column
     df = df.drop('goal', axis=1)
     df = df.drop('like', axis=1)
     df = df.drop('shar', axis=1)
     df = df.drop('prob', axis=1)
-
 
     # Categorizing career
     df["career"] = df["career"].apply(categorize_career)
@@ -180,5 +181,3 @@ def get_data():
     df["met"] = df["met"].apply(lambda x: 1 if x > 5 else 0)
 
     return df
-
-

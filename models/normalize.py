@@ -1,8 +1,8 @@
-import clean
+from models.clean import get_data
 from sklearn.preprocessing import StandardScaler
 
 # Load the dataset
-df = clean.get_data()
+df = get_data()
 X = df.drop(columns=['dec'])
 y = df['dec'].to_frame()
 
