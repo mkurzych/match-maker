@@ -1,16 +1,21 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
+	"io"
+	"net/http"
+	"net/url"
 	"os"
-	"time"
+	"strconv"
 )
 
 var (
-	userName  string
-	crushName string
+	userName   string
+	crushName  string
+	prediction float64
 )
 
 type Career int
@@ -81,6 +86,10 @@ type Data struct {
 	fun    string // fun
 	amb    string // ambition
 	met    bool
+}
+
+type Response struct {
+	Prediction float64 `json:"prediction"`
 }
 
 func main() {
@@ -160,7 +169,7 @@ func main() {
 				Affirmative("Yes").
 				Negative("No"),
 		),
-	)
+	).WithTheme(huh.ThemeCharm())
 
 	err := form.Run()
 
@@ -171,7 +180,36 @@ func main() {
 
 	sendRequest := func() {
 		// Send the data to the server
-		time.Sleep(2 * time.Second)
+		// gender age income career attr sinc intel fun amb met
+		resp, err := http.PostForm("http://localhost:5000/predict",
+			url.Values{
+				"gender": {strconv.FormatBool(data.gender)},
+				"age":    {data.age},
+				"income": {data.income},
+				"career": {strconv.Itoa(int(data.career))},
+				"attr":   {data.attr},
+				"sinc":   {data.sinc},
+				"intel":  {data.intel},
+				"fun":    {data.fun},
+				"amb":    {data.amb},
+				"met":    {strconv.FormatBool(data.met)}})
+		if err != nil {
+			fmt.Println("Error:", err)
+			os.Exit(1)
+		}
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+				fmt.Println("Error:", err)
+				os.Exit(1)
+			}
+		}(resp.Body)
+		body, err := io.ReadAll(resp.Body)
+		var result Response
+		if err := json.Unmarshal(body, &result); err != nil {
+			fmt.Println("Can not unmarshal JSON")
+		}
+		prediction = result.Prediction
 	}
 
 	// Send the data to the server
@@ -179,5 +217,5 @@ func main() {
 
 	fmt.Println("Hello,", userName)
 	fmt.Println("You have a crush on", crushName)
-	fmt.Println(data)
+	fmt.Println("The prediction is", prediction)
 }

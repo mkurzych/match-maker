@@ -17,7 +17,25 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-        data = request.form['data'].split(',')
+        gender = request.form['gender']
+        age = int(request.form['age'])
+        income = int(request.form['income'])
+        career = int(request.form['career'])
+        attr = int(request.form['attr'])
+        sinc = int(request.form['sinc'])
+        intel = int(request.form['intel'])
+        fun = int(request.form['fun'])
+        amb = int(request.form['amb'])
+        met = request.form['met']
+        if gender == 'true':
+            gender = '1'
+        else:
+            gender = '0'
+        if met == 'true':
+            met = '0'
+        else:
+            met = '1'
+        data = [gender, age, income, career, attr, sinc, intel, fun, amb, met]
         data = np.array(data).reshape(1, -1)
         data = scaler.transform(data)
         prediction = model.predict(data)
