@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
+	"github.com/charmbracelet/lipgloss"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -97,6 +99,8 @@ func main() {
 
 	// Create a new form
 	form := huh.NewForm(
+		huh.NewGroup(huh.NewNote().
+			Description("Welcome to _MatchMaker_.\n\nThis is a simple application that predicts the compatibility between you and your crush with the power of AI.\n\nPlease answer the following questions to get started.")),
 		huh.NewGroup(
 			huh.NewInput().
 				Value(&userName).
@@ -169,7 +173,7 @@ func main() {
 				Affirmative("Yes").
 				Negative("No"),
 		),
-	).WithTheme(huh.ThemeCharm())
+	).WithTheme(huh.ThemeDracula())
 
 	err := form.Run()
 
@@ -215,7 +219,31 @@ func main() {
 	// Send the data to the server
 	_ = spinner.New().Title("Processing...").Action(sendRequest).Run()
 
-	fmt.Println("Hello,", userName)
-	fmt.Println("You have a crush on", crushName)
-	fmt.Println("The prediction is", prediction)
+	{
+		var sb strings.Builder
+		keyword := func(s string) string {
+			return lipgloss.NewStyle().Foreground(lipgloss.Color("212")).Render(s)
+		}
+		fmt.Fprintf(&sb,
+			"%s\n\n%s and %s are %s compatible.",
+			lipgloss.NewStyle().Bold(true).Render(" ♡ PREDICTION ♡"),
+			keyword(userName),
+			keyword(crushName),
+			keyword(strconv.FormatFloat(prediction, 'f', 2, 64)+"%"),
+		)
+
+		if prediction > 50 {
+			fmt.Fprint(&sb, "\n\nYou have a good chance to be together :>")
+		} else {
+			fmt.Fprint(&sb, "\n\nYou have a low chance to be together :<")
+		}
+
+		fmt.Println(
+			lipgloss.NewStyle().
+				Width(45).
+				BorderStyle(lipgloss.RoundedBorder()).
+				Padding(1, 2).
+				Render(sb.String()),
+		)
+	}
 }
