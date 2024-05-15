@@ -9,6 +9,7 @@ model = load_model('model.keras')
 
 # gender age income career attr sinc intel fun amb met
 # data = [1, 27, 250, 14, 6, 10, 10, 7, 5, 1]
+# 1, 20, 500, 9, 7, 7, 7, 7, 8, 0
 
 app = Flask(__name__)
 
