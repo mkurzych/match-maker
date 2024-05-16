@@ -32,7 +32,8 @@ def process_form_data(form):
         met = '0' if form['met'] == 'true' else '1'
         income = int(form['income']) * 0.57 * 1.52  # inflation + purchasing power parity
         data = [gender, int(form['age']), income, int(form['career']), int(form['attr']),
-                int(form['sinc']), int(form['intel']), int(form['fun']), int(form['amb']), met]
+                int(form['sinc']), int(form['intel']), int(form['fun']), int(form['amb']),
+                int(form['shar']), met]
         return np.array(data).reshape(1, -1)
     except KeyError:
         abort(400, description="Required form data not provided.")

@@ -139,13 +139,13 @@ def get_data():
     df = pd.read_csv(data_file_path, na_values=missing_values)
 
     # Dropping 'goal', 'like', 'shar', and 'prob' column
-    df = df.drop(['goal', 'like', 'shar', 'prob'], axis=1)
+    df = df.drop(['goal', 'like', 'prob'], axis=1)
 
     # Categorizing career
     df["career"] = df["career"].apply(categorize_career)
 
     # Filling missing values
-    for column in ["age", "income", "attr", "intel", "sinc", "fun", "amb", "met"]:
+    for column in ["age", "income", "attr", "intel", "sinc", "fun", "amb", "met", "shar"]:
         df = fill_missing_values(df, column)
 
     # Normalizing the data

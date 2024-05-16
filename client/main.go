@@ -88,6 +88,7 @@ type Data struct {
 	intel  string // intelligence
 	fun    string // fun
 	amb    string // ambition
+	shar   string // ambition
 	met    bool
 }
 
@@ -211,6 +212,11 @@ func main() {
 				Title("How ambitious are you?").
 				Placeholder("1-10").
 				Validate(validateScale),
+			huh.NewInput().
+				Value(&data.shar).
+				Title("How similar are your interests?").
+				Placeholder("1-10").
+				Validate(validateScale),
 			huh.NewConfirm().
 				Value(&data.met).
 				Title("Have you met your crush?").
@@ -228,7 +234,7 @@ func main() {
 
 	sendRequest := func() {
 		// Send the data to the server
-		// gender age income career attr sinc intel fun amb met
+		// gender age income career attr sinc intel fun amb shar met
 		resp, err := http.PostForm("http://localhost:5000/predict",
 			url.Values{
 				"gender": {strconv.FormatBool(data.gender)},
@@ -240,6 +246,7 @@ func main() {
 				"intel":  {data.intel},
 				"fun":    {data.fun},
 				"amb":    {data.amb},
+				"shar":   {data.shar},
 				"met":    {strconv.FormatBool(data.met)}})
 		if err != nil {
 			fmt.Println("Error:", err)
