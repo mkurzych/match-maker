@@ -37,7 +37,7 @@ print_metrics('Training', train_acc, cm_train)
 print_metrics('Test', test_acc, cm_test)
 
 # Training accuracy: 0.99
-# Test accuracy: 0.70
+# Test accuracy: (0.70 + 0.71 + 0.70 + 0.70 + 0.71) / 5 = 0.704
 # Training confusion matrix:
 # [[3376 7]
 # [ 39 2438]]

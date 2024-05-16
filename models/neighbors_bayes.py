@@ -1,3 +1,6 @@
+import os
+import sys
+
 from sklearn.metrics import confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -8,7 +11,6 @@ from normalize import X_scaled, y
 def train_evaluate_knn(X_train, y_train, X_test, y_test, k_range):
     scores = {}
     matrices = {}
-    best_knn = None
     best_score = 0
     for k in k_range:
         knn = KNeighborsClassifier(n_neighbors=k)
@@ -19,8 +21,7 @@ def train_evaluate_knn(X_train, y_train, X_test, y_test, k_range):
         matrices[k] = confusion_matrix(y_test, y_pred)
         if score > best_score:
             best_score = score
-            best_knn = knn
-    return scores, matrices, best_knn
+    return scores, matrices, best_score
 
 
 def train_evaluate_gnb(X_train, y_train, X_test, y_test):
@@ -42,21 +43,23 @@ X_train, X_test, y_train, y_test = split_data(X_scaled, y)
 
 # Train and evaluate the K-Nearest Neighbors model
 k_range = range(1, 26)
-knn_scores, knn_matrices, best_knn = train_evaluate_knn(X_train, y_train, X_test, y_test, k_range)
+knn_scores, knn_matrices, best_score = train_evaluate_knn(X_train, y_train, X_test, y_test, k_range)
 
 # Train and evaluate the Naive Bayes model
 gnb_score, gnb_matrix, gnb = train_evaluate_gnb(X_train, y_train, X_test, y_test)
 
 # Print the metrics
 print_metrics('K-Nearest Neighbors', knn_scores, knn_matrices)
+print(best_score)
 print_metrics('Naive Bayes', {' ': gnb_score}, {' ': gnb_matrix})
 
-# 15KN accuracy: 0.7429
+# Best KKN accuracy: (0.74 + 0.75 + 0.73 + 0.76 + 0.74) / 5 = 0.744
+# Best K is usually between 15-20
 # 15KN confusion matrix:
 # [[1134  317]
 #  [ 329  732]]
 
-# Naive Bayes accuracy: 0.71
+# Naive Bayes accuracy: (0.71 + 0.71 + 0.72 + 0.59 + 0.71) / 5 = 0.688
 # Naive Bayes confusion matrix:
 # [[1075  411]
 #  [ 310  716]]

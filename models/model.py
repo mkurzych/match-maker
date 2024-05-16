@@ -1,10 +1,14 @@
+import pandas as pd
 from keras import Sequential
 from keras.callbacks import ModelCheckpoint, History, EarlyStopping
 from keras.layers import Dense, Dropout
 from matplotlib import pyplot
+import numpy as np
+from sklearn.metrics import confusion_matrix
 import sys
 from normalize import X_scaled, y
 from utility import split_data
+import seaborn as sns
 
 # Define constants
 INPUT_SHAPE = 128
@@ -36,6 +40,21 @@ def plot_metrics(history, metric, subplot, color_train='blue', color_test='orang
     pyplot.plot(history.history['val_' + metric], color=color_test, label='test')
 
 
+def plot_confusion_matrix(y_true, y_pred):
+    labels = np.array([0, 1])
+    matrix = confusion_matrix(y_true, y_pred, labels=labels)
+    ax = sns.heatmap(matrix, xticklabels='PN', yticklabels='PN', fmt='d', annot=True, square=True, cmap='Blues')
+    ax.set_xlabel('Actual')
+    ax.set_ylabel('Predicted')
+    ax.xaxis.tick_top()
+    ax.xaxis.set_label_position('top')
+    pyplot.tick_params(top=False, bottom=False, left=False, right=False)
+    pyplot.yticks(rotation=0)
+    filename = sys.argv[0].split('/')[-1]
+    pyplot.savefig(filename + '_matrix.png')
+    pyplot.show()
+
+
 def summarize_diagnostics(history):
     plot_metrics(history, 'loss', 211)
     plot_metrics(history, 'accuracy', 212)
@@ -63,4 +82,12 @@ print(f'Accuracy: {accuracy:.2f}')
 # Plot diagnostic learning curves
 summarize_diagnostics(history)
 
-# Accuracy: 0.77
+# Make predictions
+y_pred = model.predict(X_test)
+y_pred = np.where(y_pred >= 0.5, 1, 0)
+y_true = np.where(y_test >= 0.5, 1, 0)
+
+# Plot confusion matrix
+plot_confusion_matrix(y_true, y_pred)
+
+# Accuracy: 0.76
