@@ -2,18 +2,21 @@ import numpy as np
 from keras.models import load_model
 from models.normalize import scaler
 from flask import Flask, jsonify, request, abort
+from dotenv import load_dotenv
 import sys
 import os
+
+load_dotenv()
 
 # Add the parent directory to the sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Specify the port number
-PORT = 5000
+PORT = os.getenv('PORT') or 3000
 
 # Specify the absolute path to the model file
 current_path = os.getcwd()
-model_file_path = current_path + '/server/model.keras'
+model_file_path = current_path + '/model.keras'
 
 # Load the model
 model = load_model(model_file_path)

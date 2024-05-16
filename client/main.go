@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
@@ -97,6 +98,24 @@ type Response struct {
 func main() {
 	var data Data
 
+	validateString := func(str string) error {
+		if str == "" {
+			return errors.New("Empty string")
+		}
+		return nil
+	}
+
+	validateScale := func(str string) error {
+		n, _ := strconv.Atoi(str)
+		if n > 10 {
+			return errors.New("Pick a number smaller than 10.")
+		}
+		if n < 1 {
+			return errors.New("Pick a number bigger than 1.")
+		}
+		return nil
+	}
+
 	// Create a new form
 	form := huh.NewForm(
 		huh.NewGroup(huh.NewNote().
@@ -105,11 +124,13 @@ func main() {
 			huh.NewInput().
 				Value(&userName).
 				Title("What is your name?").
-				Placeholder("Name"),
+				Placeholder("Name").
+				Validate(validateString),
 			huh.NewInput().
 				Value(&crushName).
 				Title("What is your crush's name?").
-				Placeholder("Name"),
+				Placeholder("Name").
+				Validate(validateString),
 		),
 		huh.NewGroup(
 			huh.NewConfirm().
@@ -120,12 +141,29 @@ func main() {
 			huh.NewInput().
 				Value(&data.age).
 				Title("How old are you?").
-				Placeholder("Age"),
+				Placeholder("Age").
+				Validate(func(str string) error {
+					n, _ := strconv.Atoi(str)
+					if n < 0 {
+						return errors.New("Your age cannot be less than 0.")
+					}
+					if n > 120 {
+						return errors.New("Your age cannot be grater than 120.")
+					}
+					return nil
+				}),
 			huh.NewInput().
 				Value(&data.income).
 				Title("What is your income?").
 				Description("Please enter your monthly income in PLN").
-				Placeholder("Income"),
+				Placeholder("Income").
+				Validate(func(str string) error {
+					n, _ := strconv.Atoi(str)
+					if n < 0 {
+						return errors.New("Your income cannot be less than 0.")
+					}
+					return nil
+				}),
 			huh.NewSelect[Career]().
 				Value(&data.career).
 				Title("What is your career?").
@@ -151,23 +189,28 @@ func main() {
 			huh.NewInput().
 				Value(&data.attr).
 				Title("How attractive are you?").
-				Placeholder("1-10"),
+				Placeholder("1-10").
+				Validate(validateScale),
 			huh.NewInput().
 				Value(&data.sinc).
 				Title("How sincere are you?").
-				Placeholder("1-10"),
+				Placeholder("1-10").
+				Validate(validateScale),
 			huh.NewInput().
 				Value(&data.intel).
 				Title("How intelligent are you?").
-				Placeholder("1-10"),
+				Placeholder("1-10").
+				Validate(validateScale),
 			huh.NewInput().
 				Value(&data.fun).
 				Title("How fun are you?").
-				Placeholder("1-10"),
+				Placeholder("1-10").
+				Validate(validateScale),
 			huh.NewInput().
 				Value(&data.amb).
 				Title("How ambitious are you?").
-				Placeholder("1-10"),
+				Placeholder("1-10").
+				Validate(validateScale),
 			huh.NewConfirm().
 				Value(&data.met).
 				Title("Have you met your crush?").

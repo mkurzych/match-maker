@@ -1,0 +1,9 @@
+flask
+keras
+tensorflow
+numpy
+pandas
+matplotlib
+scikit-learn
+seaborn
+python-dotenv
