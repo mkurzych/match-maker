@@ -27,7 +27,8 @@ def process_form_data(form):
     try:
         gender = '1' if form['gender'] == 'true' else '0'
         met = '0' if form['met'] == 'true' else '1'
-        data = [gender, int(form['age']), int(form['income']), int(form['career']), int(form['attr']),
+        income = int(form['income']) * 0.57 * 1.52  # inflation + purchasing power parity
+        data = [gender, int(form['age']), income, int(form['career']), int(form['attr']),
                 int(form['sinc']), int(form['intel']), int(form['fun']), int(form['amb']), met]
         return np.array(data).reshape(1, -1)
     except KeyError:

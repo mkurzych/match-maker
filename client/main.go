@@ -124,6 +124,7 @@ func main() {
 			huh.NewInput().
 				Value(&data.income).
 				Title("What is your income?").
+				Description("Please enter your monthly income in PLN").
 				Placeholder("Income"),
 			huh.NewSelect[Career]().
 				Value(&data.career).
