@@ -7,13 +7,30 @@ Projekt polega na stworzeniu aplikacji, która na podstawie danych demograficzny
 Aplikacja składa się z dwóch głównych komponentów: serwera i klienta.
 
 - **Serwer**: Napisany w języku Python z wykorzystaniem frameworku Flask. Serwer jest odpowiedzialny za:
-    - Przetwarzanie i przechowywanie danych użytkowników.
-    - Trening i wdrażanie modeli uczenia maszynowego.
+    - Przetwarzanie danych użytkowników.
+    - Wdrażanie modeli uczenia maszynowego.
     - Obsługę zapytań od klienta i zwracanie przewidywań.
 - **Klient**: Napisany w języku Go z wykorzystaniem biblioteki Huh. Klient jest odpowiedzialny za:
     - Interakcję z użytkownikiem, zbieranie danych wejściowych.
     - Przesyłanie danych do serwera i odbieranie wyników przewidywań.
     - Prezentację wyników użytkownikowi w przystępny sposób.
+
+## Uruchomienie aplikacji
+By uruchomić aplikację, należy wykonać następujące kroki:
+1. Sklonować repozytorium na lokalny komputer.
+2. Aktywować środowisko wirtualne:
+    ```
+    conda activate
+    ```
+3. Przejść do katalogu `server` i uruchomić serwer za pomocą komendy:
+    ```
+    python main.py
+    ```
+4. Przejść do katalogu głównego i uruchomić klienta za pomocą komendy:
+    ```
+   ./matchmaker.sh
+    ```
+5. Postępować zgodnie z instrukcjami na ekranie.
 
 ## Dane
 Zestaw danych ["Speed Dating Experiment"](https://www.kaggle.com/datasets/mexwell/speed-dating) pochodzi z eksperymentu przeprowadzonego przez grupę badaczy, którzy zbierali informacje podczas sesji szybkich randek (speed dating) w latach 2002-2004. Eksperyment miał na celu zrozumienie preferencji randkowych oraz czynników wpływających na decyzje o potencjalnym dopasowaniu między uczestnikami. Dane zostały zgromadzone na Columbia University.
